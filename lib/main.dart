@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:routine_app/src/profile/profile_page.dart';
 
 void main() {
   runApp(RoutineApp());
@@ -9,10 +11,13 @@ class RoutineApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Routine App',
-      theme: ThemeData(
-        primarySwatch: Colors.pink
-      ),
-      home: RoutineHomePage(),
+      theme: ThemeData(primarySwatch: Colors.pink),
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => RoutineHomePage(),
+        '/profile': (context) => ProfilePage(),
+      },
     );
   }
 }
@@ -39,6 +44,8 @@ class _RoutineHomePageState extends State<RoutineHomePage> {
       routines[index]['done'] = !routines[index]['done'];
     });
   }
+
+  // within the 'HomeRoute' widget
 
   void showAddTaskDialog() {
     showDialog(
@@ -71,35 +78,46 @@ class _RoutineHomePageState extends State<RoutineHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('My Routine'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: showAddTaskDialog,
-          )
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: routines.length,
-        itemBuilder: (ctx, index) {
-          final task = routines[index];
-          return ListTile(
-            title: Text(
-              task['task'],
-              style: TextStyle(
-                decoration: task['done']
-                    ? TextDecoration.lineThrough
-                    : null,
-              ),
+        appBar: AppBar(
+          title: Text('My Routine'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.account_circle),
+              onPressed: () {
+                Navigator.pushNamed(context, '/profile');
+              },
             ),
-            trailing: Checkbox(
-              value: task['done'],
-              onChanged: (_) => toggleDone(index),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: showAddTaskDialog,
             ),
-          );
-        },
-      ),
+          ],
+        ),
+        body: ListView.builder(
+            itemCount: routines.length,
+            itemBuilder: (ctx, index) {
+              final task = routines[index];
+              return ListTile(
+                title: Text(
+                  task['task'],
+                  style: TextStyle(
+                    decoration:
+                        task['done'] ? TextDecoration.lineThrough : null,
+                  ),
+                ),
+                trailing: Checkbox(
+                  value: task['done'],
+                  onChanged: (_) => toggleDone(index),
+                ),
+              );
+            }));
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(
+      StringProperty('title', 'Routine Home Page'),
     );
   }
 }
