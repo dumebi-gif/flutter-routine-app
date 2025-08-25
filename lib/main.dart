@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:routine_app/src/profile/profile_page.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-void main() {
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
   runApp(RoutineApp());
 }
 
@@ -25,6 +40,26 @@ class RoutineApp extends StatelessWidget {
 class RoutineHomePage extends StatefulWidget {
   @override
   _RoutineHomePageState createState() => _RoutineHomePageState();
+  void showTestNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'routine_channel',
+      'Routine Notifications',
+      channelDescription: 'Routine reminders and updates',
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Routine Reminder',
+      'Don\'t forget to check your routines today!',
+      platformChannelSpecifics,
+      payload: 'routine_payload',
+    );
+  }
 }
 
 class _RoutineHomePageState extends State<RoutineHomePage> {
