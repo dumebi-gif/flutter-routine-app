@@ -1,0 +1,2 @@
+/Users/macbook/Desktop/proj/dumebi-proj/flutter-routine-app/android/app/.cxx/Debug/ca6f4z12/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/macbook/Desktop/proj/dumebi-proj/flutter-routine-app/android/app/.cxx/Debug/ca6f4z12/armeabi-v7a/CMakeFiles/rebuild_cache.dir
